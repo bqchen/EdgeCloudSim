@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 
 import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.Location;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.SimUtils;
 
@@ -50,7 +51,7 @@ public class NomadicMobility extends MobilityModel {
 			Element datacenterElement = (Element) datacenterNode;
 			Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 			String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
-			SimSettings.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
+			SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 			
 			expRngList[i] = new ExponentialDistribution(SimSettings.getInstance().getMobilityLookUpTable()[placeType.ordinal()]);
 		}
@@ -64,7 +65,7 @@ public class NomadicMobility extends MobilityModel {
 			Element datacenterElement = (Element) datacenterNode;
 			Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 			String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
-			SimSettings.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
+			SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 			int wlan_id = Integer.parseInt(location.getElementsByTagName("wlan_id").item(0).getTextContent());
 			int x_pos = Integer.parseInt(location.getElementsByTagName("x_pos").item(0).getTextContent());
 			int y_pos = Integer.parseInt(location.getElementsByTagName("y_pos").item(0).getTextContent());
@@ -89,7 +90,7 @@ public class NomadicMobility extends MobilityModel {
 						Element datacenterElement = (Element) datacenterNode;
 						Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 						String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
-						SimSettings.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
+						SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 						int wlan_id = Integer.parseInt(location.getElementsByTagName("wlan_id").item(0).getTextContent());
 						int x_pos = Integer.parseInt(location.getElementsByTagName("x_pos").item(0).getTextContent());
 						int y_pos = Integer.parseInt(location.getElementsByTagName("y_pos").item(0).getTextContent());

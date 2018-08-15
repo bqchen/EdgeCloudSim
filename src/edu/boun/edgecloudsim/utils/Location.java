@@ -15,8 +15,9 @@ public class Location {
 	private int xPos;
 	private int yPos;
 	private int servingWlanId;
-	SimSettings.PLACE_TYPES placeType;
-	public Location(SimSettings.PLACE_TYPES _placeType, int _servingWlanId, int _xPos, int _yPos){
+//	SimSettings.PLACE_TYPES placeType;
+	SimInputConfig.PLACE_TYPES placeType;
+	public Location(SimInputConfig.PLACE_TYPES _placeType, int _servingWlanId, int _xPos, int _yPos){
 		servingWlanId = _servingWlanId;
 		placeType=_placeType;
 		xPos = _xPos;
@@ -41,7 +42,7 @@ public class Location {
 		return servingWlanId;
 	}
 	
-	public SimSettings.PLACE_TYPES getPlaceType(){
+	public SimInputConfig.PLACE_TYPES getPlaceType(){
 		return placeType;
 	}
 	

@@ -14,11 +14,13 @@ package edu.boun.edgecloudsim.edge_client;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.UtilizationModel;
 
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.Location;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
+import edu.boun.edgecloudsim.utils.SimInputConfig.APP_TYPES;;
 
 public class Task extends Cloudlet {
-	private SimSettings.APP_TYPES type;
+	private SimInputConfig.APP_TYPES type;
 	private Location submittedLocation;
 	private int mobileDeviceId;
 	private int hostIndex;
@@ -44,7 +46,7 @@ public class Task extends Cloudlet {
 		hostIndex=_hostIndex;
 	}
 
-	public void setTaskType(SimSettings.APP_TYPES _type){
+	public void setTaskType(SimInputConfig.APP_TYPES _type){
 		type=_type;
 	}
 
@@ -60,7 +62,7 @@ public class Task extends Cloudlet {
 		return hostIndex;
 	}
 
-	public SimSettings.APP_TYPES getTaskType(){
+	public SimInputConfig.APP_TYPES getTaskType(){
 		return type;
 	}
 }

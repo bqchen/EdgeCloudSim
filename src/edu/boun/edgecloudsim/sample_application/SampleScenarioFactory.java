@@ -17,7 +17,7 @@ import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
 
 import edu.boun.edgecloudsim.core.ScenarioFactory;
-import edu.boun.edgecloudsim.core.SimSettings.APP_TYPES;
+//import edu.boun.edgecloudsim.core.SimSettings.APP_TYPES;
 import edu.boun.edgecloudsim.edge_orchestrator.BasicEdgeOrchestrator;
 import edu.boun.edgecloudsim.edge_orchestrator.EdgeOrchestrator;
 import edu.boun.edgecloudsim.edge_server.VmAllocationPolicy_Custom;
@@ -28,6 +28,7 @@ import edu.boun.edgecloudsim.task_generator.IdleActiveLoadGenerator;
 import edu.boun.edgecloudsim.task_generator.LoadGeneratorModel;
 import edu.boun.edgecloudsim.network.MM1Queue;
 import edu.boun.edgecloudsim.network.NetworkModel;
+import edu.boun.edgecloudsim.utils.SimInputConfig.APP_TYPES;;
 
 public class SampleScenarioFactory implements ScenarioFactory {
 	private int numOfMobileDevice;

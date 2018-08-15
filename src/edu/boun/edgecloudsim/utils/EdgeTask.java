@@ -12,8 +12,8 @@ package edu.boun.edgecloudsim.utils;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 
-import edu.boun.edgecloudsim.core.SimSettings;
-import edu.boun.edgecloudsim.core.SimSettings.APP_TYPES;
+//import edu.boun.edgecloudsim.core.SimSettings;
+import edu.boun.edgecloudsim.utils.SimInputConfig.APP_TYPES;
 
 public class EdgeTask {
     public APP_TYPES taskType;
@@ -31,6 +31,6 @@ public class EdgeTask {
     	outputFileSize =(long)expRngList[_taskType.ordinal()][1].sample();
     	length = (long)expRngList[_taskType.ordinal()][2].sample();
     	
-    	pesNumber = (int)SimSettings.getInstance().getTaskLookUpTable()[_taskType.ordinal()][8];
+    	pesNumber = (int)SimInputConfig.getInstance().getTaskLookUpTable()[_taskType.ordinal()][8];
 	}
 }

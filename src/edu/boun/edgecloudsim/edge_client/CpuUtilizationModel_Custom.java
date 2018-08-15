@@ -18,12 +18,13 @@ package edu.boun.edgecloudsim.edge_client;
 
 import org.cloudbus.cloudsim.UtilizationModel;
 
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 
 public class CpuUtilizationModel_Custom implements UtilizationModel {
-	private SimSettings.APP_TYPES taskType;
+	private SimInputConfig.APP_TYPES taskType;
 	
-	public CpuUtilizationModel_Custom(SimSettings.APP_TYPES _taskType){
+	public CpuUtilizationModel_Custom(SimInputConfig.APP_TYPES _taskType){
 		taskType=_taskType;
 	}
 	
@@ -33,10 +34,10 @@ public class CpuUtilizationModel_Custom implements UtilizationModel {
 	 */
 	@Override
 	public double getUtilization(double time) {
-		return SimSettings.getInstance().getTaskLookUpTable()[taskType.ordinal()][9];
+		return SimInputConfig.getInstance().getTaskLookUpTable()[taskType.ordinal()][9];
 	}
 	
-	public double predictUtilization(SimSettings.VM_TYPES _vmType){
-		return SimSettings.getInstance().getTaskLookUpTable()[taskType.ordinal()][9];
+	public double predictUtilization(SimInputConfig.VM_TYPES _vmType){
+		return SimInputConfig.getInstance().getTaskLookUpTable()[taskType.ordinal()][9];
 	}
 }

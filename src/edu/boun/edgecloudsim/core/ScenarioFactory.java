@@ -22,6 +22,7 @@ import org.cloudbus.cloudsim.VmAllocationPolicy;
 import edu.boun.edgecloudsim.edge_orchestrator.EdgeOrchestrator;
 import edu.boun.edgecloudsim.mobility.MobilityModel;
 import edu.boun.edgecloudsim.task_generator.LoadGeneratorModel;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 import edu.boun.edgecloudsim.network.NetworkModel;
 
 public interface ScenarioFactory {
@@ -48,7 +49,7 @@ public interface ScenarioFactory {
 	/**
 	 * provides abstract CPU Utilization Model
 	 */
-	public UtilizationModel getCpuUtilizationModel(SimSettings.APP_TYPES _taskType);
+	public UtilizationModel getCpuUtilizationModel(SimInputConfig.APP_TYPES _taskType);
 
 	/**
 	 * provides abstract Vm Allocation Policy

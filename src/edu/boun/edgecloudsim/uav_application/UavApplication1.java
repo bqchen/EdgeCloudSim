@@ -10,10 +10,11 @@ import org.cloudbus.cloudsim.core.CloudSim;
 
 import edu.boun.edgecloudsim.core.ScenarioFactory;
 import edu.boun.edgecloudsim.core.SimManager;
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.uav_application.SampleUAVScenarioFactory;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.SimUtils;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 public class UavApplication1 {
 	
 	public static void main(String[] args) {
@@ -39,14 +40,22 @@ public class UavApplication1 {
 		}
 		else{
 			SimLogger.printLine("Simulation setting file, output folder and iteration number are not provided! Using default ones...");
-			configFile = "scripts/uav_application/config/default_config.properties";
-			applicationsFile = "scripts/uav_application/config/applications.xml";
-			edgeDevicesFile = "scripts/uav_application/config/edge_devices.xml";
+			configFile = "scripts/uav_application/config/config1.properties";
+			applicationsFile = "scripts/uav_application/config/applications1.xml";
+			edgeDevicesFile = "scripts/uav_application/config/edge_devices1.xml";
+//			configFile = "scripts/uav_application/config/default_config.properties";
+//			applicationsFile = "scripts/uav_application/config/applications.xml";
+//			edgeDevicesFile = "scripts/uav_application/config/edge_devices.xml";
 			outputFolder = "sim_results/ite";
 		}
 		
 		//load settings from configuration file
-		SimSettings SS = SimSettings.getInstance();
+//		SimSettings SS = SimSettings.getInstance();
+		SimInputConfig SS = SimInputConfig.getInstance();
+//		SS.setConfigurationPropertiesFile(configFile);
+//		SS.setApplicationXMLFile(applicationsFile);
+//		SS.setEdgeDeviceXMLFile(edgeDevicesFile);
+		
 		if(SS.initialize(configFile, edgeDevicesFile, applicationsFile) == false) {
 			SimLogger.printLine("cannot initialize simulation settings");
 			System.exit(0);

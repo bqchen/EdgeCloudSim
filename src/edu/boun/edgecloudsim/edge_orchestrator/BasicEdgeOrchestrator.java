@@ -17,11 +17,12 @@ import java.util.List;
 import org.cloudbus.cloudsim.core.CloudSim;
 
 import edu.boun.edgecloudsim.core.SimManager;
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.edge_server.EdgeVM;
 import edu.boun.edgecloudsim.edge_client.CpuUtilizationModel_Custom;
 import edu.boun.edgecloudsim.edge_client.Task;
 import edu.boun.edgecloudsim.utils.Location;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 import edu.boun.edgecloudsim.utils.SimUtils;
 
 public class BasicEdgeOrchestrator extends EdgeOrchestrator {
@@ -35,7 +36,7 @@ public class BasicEdgeOrchestrator extends EdgeOrchestrator {
 
 	@Override
 	public void initialize() {
-		numberOfHost=SimSettings.getInstance().getNumOfEdgeHosts();
+		numberOfHost=SimInputConfig.getInstance().getNumOfEdgeHosts();
 		
 		lastSelectedHostIndex = -1;
 		lastSelectedVmIndexes = new int[numberOfHost];
@@ -45,15 +46,15 @@ public class BasicEdgeOrchestrator extends EdgeOrchestrator {
 
 	@Override
 	public int getDeviceToOffload(Task task) {
-		int result = SimSettings.GENERIC_EDGE_DEVICE_ID;
+		int result = SimInputConfig.GENERIC_EDGE_DEVICE_ID;
 		if(!simScenario.equals("SINGLE_TIER")){
 			//decide to use cloud or cloudlet VM
 			int CloudVmPicker = SimUtils.getRandomNumber(0, 100);
 			
-			if(CloudVmPicker <= SimSettings.getInstance().getTaskLookUpTable()[task.getTaskType().ordinal()][1])
-				result = SimSettings.CLOUD_DATACENTER_ID;
+			if(CloudVmPicker <= SimInputConfig.getInstance().getTaskLookUpTable()[task.getTaskType().ordinal()][1])
+				result = SimInputConfig.CLOUD_DATACENTER_ID;
 			else
-				result = SimSettings.GENERIC_EDGE_DEVICE_ID;
+				result = SimInputConfig.GENERIC_EDGE_DEVICE_ID;
 		}
 		
 		return result;

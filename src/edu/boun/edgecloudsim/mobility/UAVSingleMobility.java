@@ -11,8 +11,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.Location;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.SimUtils;
 
@@ -28,19 +29,19 @@ private List<TreeMap<Double, Location>> treeMapArray;
 	public void initialize() {
 		treeMapArray = new ArrayList<TreeMap<Double, Location>>();
 		
-		ExponentialDistribution[] expRngList = new ExponentialDistribution[SimSettings.getInstance().getNumOfEdgeDatacenters()];
+		ExponentialDistribution[] expRngList = new ExponentialDistribution[SimInputConfig.getInstance().getNumOfEdgeDatacenters()];
 
 		//create random number generator for each place
-		Document doc = SimSettings.getInstance().getEdgeDevicesDocument();
+		Document doc = SimInputConfig.getInstance().getEdgeDevicesDocument();
 		NodeList datacenterList = doc.getElementsByTagName("datacenter");
 		for (int i = 0; i < datacenterList.getLength(); i++) {
 			Node datacenterNode = datacenterList.item(i);
 			Element datacenterElement = (Element) datacenterNode;
 			Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 			String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
-			SimSettings.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
+			SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 			
-			expRngList[i] = new ExponentialDistribution(SimSettings.getInstance().getMobilityLookUpTable()[placeType.ordinal()]);
+			expRngList[i] = new ExponentialDistribution(SimInputConfig.getInstance().getMobilityLookUpTable()[placeType.ordinal()]);
 //			SimLogger.printLine("createSuccess");
 		}
 		
@@ -48,12 +49,12 @@ private List<TreeMap<Double, Location>> treeMapArray;
 		for(int i=0; i<numberOfMobileDevices; i++) {
 			treeMapArray.add(i, new TreeMap<Double, Location>());
 			
-			int randDatacenterId = SimUtils.getRandomNumber(0, SimSettings.getInstance().getNumOfEdgeDatacenters()-1);
+			int randDatacenterId = SimUtils.getRandomNumber(0, SimInputConfig.getInstance().getNumOfEdgeDatacenters()-1);
 			Node datacenterNode = datacenterList.item(randDatacenterId);
 			Element datacenterElement = (Element) datacenterNode;
 			Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 			String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
-			SimSettings.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
+			SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 			int wlan_id = Integer.parseInt(location.getElementsByTagName("wlan_id").item(0).getTextContent());
 			int x_pos = Integer.parseInt(location.getElementsByTagName("x_pos").item(0).getTextContent());
 			int y_pos = Integer.parseInt(location.getElementsByTagName("y_pos").item(0).getTextContent());
@@ -65,7 +66,7 @@ private List<TreeMap<Double, Location>> treeMapArray;
 		for(int i=0; i<numberOfMobileDevices; i++) {
 			TreeMap<Double, Location> treeMap = treeMapArray.get(i);
 
-			while(treeMap.lastKey() < SimSettings.getInstance().getSimulationTime()) {				
+			while(treeMap.lastKey() < SimInputConfig.getInstance().getSimulationTime()) {				
 				boolean placeFound = false;
 				int currentLocationId = treeMap.lastEntry().getValue().getServingWlanId();
 //				SimLogger.printLine("currentLocation:" + currentLocationId);
@@ -73,7 +74,7 @@ private List<TreeMap<Double, Location>> treeMapArray;
 				double waitingTime = expRngList[currentLocationId].sample();
 				
 				while(placeFound == false){
-					int newDatacenterId = SimUtils.getRandomNumber(0,SimSettings.getInstance().getNumOfEdgeDatacenters()-1);
+					int newDatacenterId = SimUtils.getRandomNumber(0,SimInputConfig.getInstance().getNumOfEdgeDatacenters()-1);
 //					SimLogger.printLine("createSuccess: " + newDatacenterId);
 //					if(newDatacenterId != currentLocationId){
 						placeFound = true;
@@ -81,7 +82,7 @@ private List<TreeMap<Double, Location>> treeMapArray;
 						Element datacenterElement = (Element) datacenterNode;
 						Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 						String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
-						SimSettings.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
+						SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 						int wlan_id = Integer.parseInt(location.getElementsByTagName("wlan_id").item(0).getTextContent());
 						int x_pos = Integer.parseInt(location.getElementsByTagName("x_pos").item(0).getTextContent());
 						int y_pos = Integer.parseInt(location.getElementsByTagName("y_pos").item(0).getTextContent());
