@@ -27,8 +27,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import edu.boun.edgecloudsim.utils.SimLogger;
-import edu.boun.edgecloudsim.core.SimSettings;
-import edu.boun.edgecloudsim.core.SimSettings.APP_TYPES;
+//import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings.APP_TYPES;
 import edu.boun.edgecloudsim.utils.OrderedProperties;
 
 public class SimInputConfig {

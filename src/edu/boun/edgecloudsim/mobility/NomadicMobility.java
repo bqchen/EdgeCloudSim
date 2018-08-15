@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.Location;
 import edu.boun.edgecloudsim.utils.SimInputConfig;
 import edu.boun.edgecloudsim.utils.SimLogger;
@@ -41,10 +41,10 @@ public class NomadicMobility extends MobilityModel {
 	public void initialize() {
 		treeMapArray = new ArrayList<TreeMap<Double, Location>>();
 		
-		ExponentialDistribution[] expRngList = new ExponentialDistribution[SimSettings.getInstance().getNumOfEdgeDatacenters()];
+		ExponentialDistribution[] expRngList = new ExponentialDistribution[SimInputConfig.getInstance().getNumOfEdgeDatacenters()];
 
 		//create random number generator for each place
-		Document doc = SimSettings.getInstance().getEdgeDevicesDocument();
+		Document doc = SimInputConfig.getInstance().getEdgeDevicesDocument();
 		NodeList datacenterList = doc.getElementsByTagName("datacenter");
 		for (int i = 0; i < datacenterList.getLength(); i++) {
 			Node datacenterNode = datacenterList.item(i);
@@ -53,14 +53,14 @@ public class NomadicMobility extends MobilityModel {
 			String attractiveness = location.getElementsByTagName("attractiveness").item(0).getTextContent();
 			SimInputConfig.PLACE_TYPES placeType = SimUtils.stringToPlace(attractiveness);
 			
-			expRngList[i] = new ExponentialDistribution(SimSettings.getInstance().getMobilityLookUpTable()[placeType.ordinal()]);
+			expRngList[i] = new ExponentialDistribution(SimInputConfig.getInstance().getMobilityLookUpTable()[placeType.ordinal()]);
 		}
 		
 		//initialize tree maps and position of mobile devices
 		for(int i=0; i<numberOfMobileDevices; i++) {
 			treeMapArray.add(i, new TreeMap<Double, Location>());
 			
-			int randDatacenterId = SimUtils.getRandomNumber(0, SimSettings.getInstance().getNumOfEdgeDatacenters()-1);
+			int randDatacenterId = SimUtils.getRandomNumber(0, SimInputConfig.getInstance().getNumOfEdgeDatacenters()-1);
 			Node datacenterNode = datacenterList.item(randDatacenterId);
 			Element datacenterElement = (Element) datacenterNode;
 			Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
@@ -77,13 +77,13 @@ public class NomadicMobility extends MobilityModel {
 		for(int i=0; i<numberOfMobileDevices; i++) {
 			TreeMap<Double, Location> treeMap = treeMapArray.get(i);
 
-			while(treeMap.lastKey() < SimSettings.getInstance().getSimulationTime()) {				
+			while(treeMap.lastKey() < SimInputConfig.getInstance().getSimulationTime()) {				
 				boolean placeFound = false;
 				int currentLocationId = treeMap.lastEntry().getValue().getServingWlanId();
 				double waitingTime = expRngList[currentLocationId].sample();
 				
 				while(placeFound == false){
-					int newDatacenterId = SimUtils.getRandomNumber(0,SimSettings.getInstance().getNumOfEdgeDatacenters()-1);
+					int newDatacenterId = SimUtils.getRandomNumber(0,SimInputConfig.getInstance().getNumOfEdgeDatacenters()-1);
 					if(newDatacenterId != currentLocationId){
 						placeFound = true;
 						Node datacenterNode = datacenterList.item(newDatacenterId);

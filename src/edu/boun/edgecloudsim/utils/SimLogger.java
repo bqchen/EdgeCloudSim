@@ -25,7 +25,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import edu.boun.edgecloudsim.core.SimManager;
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimInputConfig;
 
 public class SimLogger {
 	public static enum TASK_STATUS {
@@ -135,7 +135,7 @@ public class SimLogger {
 	}
 
 	public void simStopped() throws IOException {
-		int numOfAppTypes = SimSettings.getInstance().getTaskLookUpTable().length;
+		int numOfAppTypes = SimInputConfig.getInstance().getTaskLookUpTable().length;
 
 		File successFile = null, failFile = null, vmLoadFile = null, locationFile = null;
 		FileWriter successFW = null, failFW = null, vmLoadFW = null, locationFW = null;
@@ -182,7 +182,7 @@ public class SimLogger {
 
 		// open all files and prepare them for write
 		if (fileLogEnabled) {
-			if (SimSettings.getInstance().getDeepFileLoggingEnabled()) {
+			if (SimInputConfig.getInstance().getDeepFileLoggingEnabled()) {
 				successFile = new File(outputFolder, filePrefix + "_SUCCESS.log");
 				successFW = new FileWriter(successFile, true);
 				successBW = new BufferedWriter(successFW);
@@ -206,10 +206,10 @@ public class SimLogger {
 				if (i < numOfAppTypes) {
 					// if related app is not used in this simulation, just
 					// discard it
-					if (SimSettings.getInstance().getTaskLookUpTable()[i][0] == 0)
+					if (SimInputConfig.getInstance().getTaskLookUpTable()[i][0] == 0)
 						continue;
 
-					fileName = SimSettings.APP_TYPES.values()[i] + "_GENERIC.log";
+					fileName = SimInputConfig.APP_TYPES.values()[i] + "_GENERIC.log";
 				}
 
 				genericFiles[i] = new File(outputFolder, filePrefix + "_" + fileName);
@@ -218,7 +218,7 @@ public class SimLogger {
 				appendToFile(genericBWs[i], "#auto generated file!");
 			}
 
-			if (SimSettings.getInstance().getDeepFileLoggingEnabled()) {
+			if (SimInputConfig.getInstance().getDeepFileLoggingEnabled()) {
 				appendToFile(successBW, "#auto generated file!");
 				appendToFile(failBW, "#auto generated file!");
 			}
@@ -238,14 +238,14 @@ public class SimLogger {
 			if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED) {
 				completedTask[value.getTaskType()]++;
 
-				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+				if (value.getVmType() == SimInputConfig.VM_TYPES.CLOUD_VM.ordinal())
 					completedTaskOnCloud[value.getTaskType()]++;
 				else
 					completedTaskOnCloudlet[value.getTaskType()]++;
 			} else {
 				failedTask[value.getTaskType()]++;
 
-				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+				if (value.getVmType() == SimInputConfig.VM_TYPES.CLOUD_VM.ordinal())
 					failedTaskOnCloud[value.getTaskType()]++;
 				else
 					failedTaskOnCloudlet[value.getTaskType()]++;
@@ -257,7 +257,7 @@ public class SimLogger {
 				networkDelay[value.getTaskType()] += value.getNetworkDelay();
 				processingTime[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
 
-				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal()) {
+				if (value.getVmType() == SimInputConfig.VM_TYPES.CLOUD_VM.ordinal()) {
 					wanDelay[value.getTaskType()] += value.getNetworkDelay();
 					serviceTimeOnCloud[value.getTaskType()] += value.getServiceTime();
 					processingTimeOnCloud[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
@@ -267,30 +267,30 @@ public class SimLogger {
 					processingTimeOnCloudlet[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
 				}
 
-				if (fileLogEnabled && SimSettings.getInstance().getDeepFileLoggingEnabled())
+				if (fileLogEnabled && SimInputConfig.getInstance().getDeepFileLoggingEnabled())
 					appendToFile(successBW, value.toString(key));
 			} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_VM_CAPACITY) {
 				rejectedTaskDoToVmCapacity[value.getTaskType()]++;
-				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
-					if (fileLogEnabled && SimSettings.getInstance().getDeepFileLoggingEnabled())
+				if (value.getVmType() == SimInputConfig.VM_TYPES.CLOUD_VM.ordinal())
+					if (fileLogEnabled && SimInputConfig.getInstance().getDeepFileLoggingEnabled())
 						appendToFile(failBW, value.toString(key));
 			} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_BANDWIDTH
 					|| value.getStatus() == SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_BANDWIDTH) {
 				failedTaskDuetoBw[value.getTaskType()]++;
-				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+				if (value.getVmType() == SimInputConfig.VM_TYPES.CLOUD_VM.ordinal())
 					failedTaskDuetoWanBw[value.getTaskType()]++;
 				else
 					failedTaskDuetoLanBw[value.getTaskType()]++;
 
-				if (fileLogEnabled && SimSettings.getInstance().getDeepFileLoggingEnabled())
+				if (fileLogEnabled && SimInputConfig.getInstance().getDeepFileLoggingEnabled())
 					appendToFile(failBW, value.toString(key));
 			} else if (value.getStatus() == SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_MOBILITY) {
 				failedTaskDuetoMobility[value.getTaskType()]++;
-				if (fileLogEnabled && SimSettings.getInstance().getDeepFileLoggingEnabled())
+				if (fileLogEnabled && SimInputConfig.getInstance().getDeepFileLoggingEnabled())
 					appendToFile(failBW, value.toString(key));
 			} else {
 				uncompletedTask[value.getTaskType()]++;
-				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+				if (value.getVmType() == SimInputConfig.VM_TYPES.CLOUD_VM.ordinal())
 					uncompletedTaskOnCloud[value.getTaskType()]++;
 				else
 					uncompletedTaskOnCloudlet[value.getTaskType()]++;
@@ -339,12 +339,12 @@ public class SimLogger {
 
 		if (fileLogEnabled) {
 			// write location info to file
-			for (int t = 1; t < (SimSettings.getInstance().getSimulationTime()
-					/ SimSettings.getInstance().getVmLocationLogInterval()); t++) {
-				int[] locationInfo = new int[SimSettings.PLACE_TYPES.values().length];
-				Double time = t * SimSettings.getInstance().getVmLocationLogInterval();
+			for (int t = 1; t < (SimInputConfig.getInstance().getSimulationTime()
+					/ SimInputConfig.getInstance().getVmLocationLogInterval()); t++) {
+				int[] locationInfo = new int[SimInputConfig.PLACE_TYPES.values().length];
+				Double time = t * SimInputConfig.getInstance().getVmLocationLogInterval();
 
-				if (time < SimSettings.getInstance().getWarmUpPeriod())
+				if (time < SimInputConfig.getInstance().getWarmUpPeriod())
 					continue;
 
 				for (int i = 0; i < SimManager.getInstance().getNumOfMobileDevice(); i++) {
@@ -356,7 +356,7 @@ public class SimLogger {
 
 				locationBW.write(time.toString());
 				for (int i = 0; i < locationInfo.length; i++)
-					locationBW.write(SimSettings.DELIMITER + locationInfo[i]);
+					locationBW.write(SimInputConfig.DELIMITER + locationInfo[i]);
 
 				locationBW.newLine();
 			}
@@ -366,7 +366,7 @@ public class SimLogger {
 				if (i < numOfAppTypes) {
 					// if related app is not used in this simulation, just
 					// discard it
-					if (SimSettings.getInstance().getTaskLookUpTable()[i][0] == 0)
+					if (SimInputConfig.getInstance().getTaskLookUpTable()[i][0] == 0)
 						continue;
 				}
 
@@ -379,16 +379,16 @@ public class SimLogger {
 				double _cost = (completedTask[i] == 0) ? 0.0 : (cost[i] / (double) completedTask[i]);
 
 				// write generic results
-				String genericResult1 = Integer.toString(completedTask[i]) + SimSettings.DELIMITER
-						+ Integer.toString(failedTask[i]) + SimSettings.DELIMITER 
-						+ Integer.toString(uncompletedTask[i]) + SimSettings.DELIMITER 
-						+ Integer.toString(failedTaskDuetoBw[i]) + SimSettings.DELIMITER
-						+ Double.toString(_serviceTime) + SimSettings.DELIMITER 
-						+ Double.toString(_processingTime) + SimSettings.DELIMITER 
-						+ Double.toString(_networkDelay) + SimSettings.DELIMITER
-						+ Double.toString(_vmLoad) + SimSettings.DELIMITER 
-						+ Double.toString(_cost) + SimSettings.DELIMITER 
-						+ Integer.toString(rejectedTaskDoToVmCapacity[i]) + SimSettings.DELIMITER 
+				String genericResult1 = Integer.toString(completedTask[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(failedTask[i]) + SimInputConfig.DELIMITER 
+						+ Integer.toString(uncompletedTask[i]) + SimInputConfig.DELIMITER 
+						+ Integer.toString(failedTaskDuetoBw[i]) + SimInputConfig.DELIMITER
+						+ Double.toString(_serviceTime) + SimInputConfig.DELIMITER 
+						+ Double.toString(_processingTime) + SimInputConfig.DELIMITER 
+						+ Double.toString(_networkDelay) + SimInputConfig.DELIMITER
+						+ Double.toString(_vmLoad) + SimInputConfig.DELIMITER 
+						+ Double.toString(_cost) + SimInputConfig.DELIMITER 
+						+ Integer.toString(rejectedTaskDoToVmCapacity[i]) + SimInputConfig.DELIMITER 
 						+ Integer.toString(failedTaskDuetoMobility[i]);
 
 				// check if the divisor is zero in order to avoid division by
@@ -399,12 +399,12 @@ public class SimLogger {
 						: (serviceTimeOnCloudlet[i] / (double) completedTaskOnCloudlet[i]);
 				double _processingTimeOnCloudlet = (completedTaskOnCloudlet[i] == 0) ? 0.0
 						: (processingTimeOnCloudlet[i] / (double) completedTaskOnCloudlet[i]);
-				String genericResult2 = Integer.toString(completedTaskOnCloudlet[i]) + SimSettings.DELIMITER
-						+ Integer.toString(failedTaskOnCloudlet[i]) + SimSettings.DELIMITER
-						+ Integer.toString(uncompletedTaskOnCloudlet[i]) + SimSettings.DELIMITER
-						+ Integer.toString(failedTaskDuetoLanBw[i]) + SimSettings.DELIMITER
-						+ Double.toString(_serviceTimeOnCloudlet) + SimSettings.DELIMITER
-						+ Double.toString(_processingTimeOnCloudlet) + SimSettings.DELIMITER
+				String genericResult2 = Integer.toString(completedTaskOnCloudlet[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(failedTaskOnCloudlet[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(uncompletedTaskOnCloudlet[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(failedTaskDuetoLanBw[i]) + SimInputConfig.DELIMITER
+						+ Double.toString(_serviceTimeOnCloudlet) + SimInputConfig.DELIMITER
+						+ Double.toString(_processingTimeOnCloudlet) + SimInputConfig.DELIMITER
 						+ Double.toString(_lanDelay);
 
 				// check if the divisor is zero in order to avoid division by
@@ -415,12 +415,12 @@ public class SimLogger {
 						: (serviceTimeOnCloud[i] / (double) completedTaskOnCloud[i]);
 				double _processingTimeOnCloud = (completedTaskOnCloud[i] == 0) ? 0.0
 						: (processingTimeOnCloud[i] / (double) completedTaskOnCloud[i]);
-				String genericResult3 = Integer.toString(completedTaskOnCloud[i]) + SimSettings.DELIMITER
-						+ Integer.toString(failedTaskOnCloud[i]) + SimSettings.DELIMITER
-						+ Integer.toString(uncompletedTaskOnCloud[i]) + SimSettings.DELIMITER
-						+ Integer.toString(failedTaskDuetoWanBw[i]) + SimSettings.DELIMITER
-						+ Double.toString(_serviceTimeOnCloud) + SimSettings.DELIMITER
-						+ Double.toString(_processingTimeOnCloud) + SimSettings.DELIMITER 
+				String genericResult3 = Integer.toString(completedTaskOnCloud[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(failedTaskOnCloud[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(uncompletedTaskOnCloud[i]) + SimInputConfig.DELIMITER
+						+ Integer.toString(failedTaskDuetoWanBw[i]) + SimInputConfig.DELIMITER
+						+ Double.toString(_serviceTimeOnCloud) + SimInputConfig.DELIMITER
+						+ Double.toString(_processingTimeOnCloud) + SimInputConfig.DELIMITER 
 						+ Double.toString(_wanDelay);
 
 				appendToFile(genericBWs[i], genericResult1);
@@ -429,7 +429,7 @@ public class SimLogger {
 			}
 
 			// close open files
-			if (SimSettings.getInstance().getDeepFileLoggingEnabled()) {
+			if (SimInputConfig.getInstance().getDeepFileLoggingEnabled()) {
 				successBW.close();
 				failBW.close();
 			}
@@ -439,7 +439,7 @@ public class SimLogger {
 				if (i < numOfAppTypes) {
 					// if related app is not used in this simulation, just
 					// discard it
-					if (SimSettings.getInstance().getTaskLookUpTable()[i][0] == 0)
+					if (SimInputConfig.getInstance().getTaskLookUpTable()[i][0] == 0)
 						continue;
 				}
 				genericBWs[i].close();
@@ -526,7 +526,7 @@ class VmLoadLogItem {
 	}
 
 	public String toString() {
-		return time + SimSettings.DELIMITER + vmLoad;
+		return time + SimInputConfig.DELIMITER + vmLoad;
 	}
 }
 
@@ -556,7 +556,7 @@ class LogItem {
 		status = SimLogger.TASK_STATUS.CREATED;
 		taskEndTime = 0;
 
-		if (_taskStartTime < SimSettings.getInstance().getWarmUpPeriod())
+		if (_taskStartTime < SimInputConfig.getInstance().getWarmUpPeriod())
 			isInWarmUpPeriod = true;
 		else
 			isInWarmUpPeriod = false;
@@ -640,11 +640,11 @@ class LogItem {
 	}
 
 	public String toString(int taskId) {
-		String result = taskId + SimSettings.DELIMITER + datacenterId + SimSettings.DELIMITER + hostId
-				+ SimSettings.DELIMITER + vmId + SimSettings.DELIMITER + vmType + SimSettings.DELIMITER + taskType
-				+ SimSettings.DELIMITER + taskLenght + SimSettings.DELIMITER + taskInputType + SimSettings.DELIMITER
-				+ taskOutputSize + SimSettings.DELIMITER + taskStartTime + SimSettings.DELIMITER + taskEndTime
-				+ SimSettings.DELIMITER;
+		String result = taskId + SimInputConfig.DELIMITER + datacenterId + SimInputConfig.DELIMITER + hostId
+				+ SimInputConfig.DELIMITER + vmId + SimInputConfig.DELIMITER + vmType + SimInputConfig.DELIMITER + taskType
+				+ SimInputConfig.DELIMITER + taskLenght + SimInputConfig.DELIMITER + taskInputType + SimInputConfig.DELIMITER
+				+ taskOutputSize + SimInputConfig.DELIMITER + taskStartTime + SimInputConfig.DELIMITER + taskEndTime
+				+ SimInputConfig.DELIMITER;
 
 		if (status == SimLogger.TASK_STATUS.COMLETED)
 			result += networkDelay;

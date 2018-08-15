@@ -24,11 +24,12 @@ import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEvent;
 
 import edu.boun.edgecloudsim.core.SimManager;
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.edge_server.EdgeVM;
 import edu.boun.edgecloudsim.network.NetworkModel;
 import edu.boun.edgecloudsim.utils.EdgeTask;
 import edu.boun.edgecloudsim.utils.Location;
+import edu.boun.edgecloudsim.utils.SimInputConfig;
 import edu.boun.edgecloudsim.utils.SimLogger;
 
 
@@ -73,7 +74,7 @@ public class MobileDeviceManager extends DatacenterBroker {
 			double WlanDelay = networkModel.getDownloadDelay(task.getAssociatedHostId(), task.getMobileDeviceId(), task.getCloudletOutputSize());
 			if(WlanDelay > 0)
 			{
-				networkModel.downloadStarted(currentLocation, SimSettings.GENERIC_EDGE_DEVICE_ID);
+				networkModel.downloadStarted(currentLocation, SimInputConfig.GENERIC_EDGE_DEVICE_ID);
 				schedule(getId(), WlanDelay, RESPONSE_RECEIVED_BY_MOBILE_DEVICE, task);
 				SimLogger.getInstance().downloadStarted(task.getCloudletId(), WlanDelay);
 			}
@@ -104,19 +105,19 @@ public class MobileDeviceManager extends DatacenterBroker {
 			{
 				Task task = (Task) ev.getData();
 				
-				networkModel.uploadFinished(task.getSubmittedLocation(), SimSettings.CLOUD_DATACENTER_ID);
+				networkModel.uploadFinished(task.getSubmittedLocation(), SimInputConfig.CLOUD_DATACENTER_ID);
 				
 				//save related host id
-				task.setAssociatedHostId(SimSettings.CLOUD_HOST_ID);
+				task.setAssociatedHostId(SimInputConfig.CLOUD_HOST_ID);
 				
 				SimLogger.getInstance().uploaded(task.getCloudletId(),
-						SimSettings.CLOUD_DATACENTER_ID,
-						SimSettings.CLOUD_HOST_ID,
-						SimSettings.CLOUD_VM_ID,
-						SimSettings.VM_TYPES.CLOUD_VM.ordinal());
+						SimInputConfig.CLOUD_DATACENTER_ID,
+						SimInputConfig.CLOUD_HOST_ID,
+						SimInputConfig.CLOUD_VM_ID,
+						SimInputConfig.VM_TYPES.CLOUD_VM.ordinal());
 				
 				//calculate computational delay in cloud
-				double ComputationDelay = (double)task.getCloudletLength() / (double)SimSettings.getInstance().getMipsForCloud();
+				double ComputationDelay = (double)task.getCloudletLength() / (double)SimInputConfig.getInstance().getMipsForCloud();
 				
 				schedule(getId(), ComputationDelay, REQUEST_PROCESSED_BY_CLOUD, task);
 				
@@ -127,13 +128,13 @@ public class MobileDeviceManager extends DatacenterBroker {
 				Task task = (Task) ev.getData();
 
 				//SimLogger.printLine(CloudSim.clock() + ": " + getName() + ": Cloudlet " + task.getCloudletId() + " received");
-				double WanDelay = networkModel.getDownloadDelay(SimSettings.CLOUD_DATACENTER_ID, task.getMobileDeviceId(), task.getCloudletOutputSize());
+				double WanDelay = networkModel.getDownloadDelay(SimInputConfig.CLOUD_DATACENTER_ID, task.getMobileDeviceId(), task.getCloudletOutputSize());
 				if(WanDelay > 0)
 				{
 					Location currentLocation = SimManager.getInstance().getMobilityModel().getLocation(task.getMobileDeviceId(),CloudSim.clock()+WanDelay);
 					if(task.getSubmittedLocation().equals(currentLocation))
 					{
-						networkModel.downloadStarted(task.getSubmittedLocation(), SimSettings.CLOUD_DATACENTER_ID);
+						networkModel.downloadStarted(task.getSubmittedLocation(), SimInputConfig.CLOUD_DATACENTER_ID);
 						schedule(getId(), WanDelay, RESPONSE_RECEIVED_BY_MOBILE_DEVICE, task);
 						SimLogger.getInstance().downloadStarted(task.getCloudletId(), WanDelay);
 					}
@@ -173,7 +174,7 @@ public class MobileDeviceManager extends DatacenterBroker {
 			{
 				Task task = (Task) ev.getData();
 				
-				networkModel.uploadFinished(task.getSubmittedLocation(), SimSettings.GENERIC_EDGE_DEVICE_ID);
+				networkModel.uploadFinished(task.getSubmittedLocation(), SimInputConfig.GENERIC_EDGE_DEVICE_ID);
 				
 				submitTaskToEdgeDevice(task,0);
 				
@@ -183,10 +184,10 @@ public class MobileDeviceManager extends DatacenterBroker {
 			{
 				Task task = (Task) ev.getData();
 				
-				if(task.getAssociatedHostId() == SimSettings.CLOUD_HOST_ID)
-					networkModel.downloadFinished(task.getSubmittedLocation(), SimSettings.CLOUD_DATACENTER_ID);
+				if(task.getAssociatedHostId() == SimInputConfig.CLOUD_HOST_ID)
+					networkModel.downloadFinished(task.getSubmittedLocation(), SimInputConfig.CLOUD_DATACENTER_ID);
 				else
-					networkModel.downloadFinished(task.getSubmittedLocation(), SimSettings.GENERIC_EDGE_DEVICE_ID);
+					networkModel.downloadFinished(task.getSubmittedLocation(), SimInputConfig.GENERIC_EDGE_DEVICE_ID);
 				
 				//SimLogger.printLine(CloudSim.clock() + ": " + getName() + ": Cloudlet " + cloudlet.getCloudletId() + " is received");
 				SimLogger.getInstance().downloaded(task.getCloudletId(), CloudSim.clock());
@@ -248,7 +249,7 @@ public class MobileDeviceManager extends DatacenterBroker {
 
 		int nextHopId = SimManager.getInstance().getEdgeOrchestrator().getDeviceToOffload(task);
 		
-		if(nextHopId == SimSettings.CLOUD_DATACENTER_ID){
+		if(nextHopId == SimInputConfig.CLOUD_DATACENTER_ID){
 			double WanDelay = networkModel.getUploadDelay(task.getMobileDeviceId(), nextHopId, task.getCloudletFileSize());
 			
 			if(WanDelay>0){
@@ -262,7 +263,7 @@ public class MobileDeviceManager extends DatacenterBroker {
 				SimLogger.getInstance().rejectedDueToBandwidth(
 						task.getCloudletId(),
 						CloudSim.clock(),
-						SimSettings.VM_TYPES.CLOUD_VM.ordinal());
+						SimInputConfig.VM_TYPES.CLOUD_VM.ordinal());
 			}
 		}
 //		else if(nextHopId == SimSettings.EDGE_ORCHESTRATOR_ID){
@@ -280,7 +281,7 @@ public class MobileDeviceManager extends DatacenterBroker {
 //						SimSettings.VM_TYPES.EDGE_VM.ordinal());
 //			}
 //		}
-		else if(nextHopId == SimSettings.GENERIC_EDGE_DEVICE_ID) {
+		else if(nextHopId == SimInputConfig.GENERIC_EDGE_DEVICE_ID) {
 			double WlanDelay = networkModel.getUploadDelay(task.getMobileDeviceId(), nextHopId, task.getCloudletFileSize());
 			
 			if(WlanDelay > 0){
@@ -292,7 +293,7 @@ public class MobileDeviceManager extends DatacenterBroker {
 				SimLogger.getInstance().rejectedDueToBandwidth(
 						task.getCloudletId(),
 						CloudSim.clock(),
-						SimSettings.VM_TYPES.EDGE_VM.ordinal());
+						SimInputConfig.VM_TYPES.EDGE_VM.ordinal());
 			}
 		}
 		else {

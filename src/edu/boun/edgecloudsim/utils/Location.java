@@ -9,7 +9,7 @@
 
 package edu.boun.edgecloudsim.utils;
 
-import edu.boun.edgecloudsim.core.SimSettings;
+//import edu.boun.edgecloudsim.core.SimSettings;
 
 public class Location {
 	private int xPos;
