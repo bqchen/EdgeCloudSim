@@ -121,14 +121,15 @@ public class SimInputConfig {
 		OutputStream fos;
 		
 //		File file = new File("scripts/uav_application/config/config1"+".properties");
-		File file = new File(propertiesFile);
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		File file = createFile(propertiesFile);
+//		File file = new File(propertiesFile);
+//		if (!file.exists()) {
+//			try {
+//				file.createNewFile();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 		
 		try {
@@ -236,49 +237,7 @@ public class SimInputConfig {
 			
 //			prop.save(fos, "The new config file");
 			fos = new FileOutputStream(propertiesFile);
-			prop.store(fos, "The new config file");
-			
-//			input = new FileInputStream("scripts/uav_application/config/config1"+".properties");
-//			prop.load(input);
-			
-			SIMULATION_TIME = (double)60 * Double.parseDouble(prop.getProperty("simulation_time")); //seconds
-			WARM_UP_PERIOD = (double)60 * Double.parseDouble(prop.getProperty("warm_up_period")); //seconds
-			INTERVAL_TO_GET_VM_LOAD_LOG = (double)60 * Double.parseDouble(prop.getProperty("vm_load_check_interval")); //seconds
-			INTERVAL_TO_GET_VM_LOCATION_LOG = (double)60 * Double.parseDouble(prop.getProperty("vm_location_check_interval")); //seconds
-			FILE_LOG_ENABLED = Boolean.parseBoolean(prop.getProperty("file_log_enabled"));
-			DEEP_FILE_LOG_ENABLED = Boolean.parseBoolean(prop.getProperty("deep_file_log_enabled"));
-			
-			MIN_NUM_OF_MOBILE_DEVICES = Integer.parseInt(prop.getProperty("min_number_of_mobile_devices"));
-			MAX_NUM_OF_MOBILE_DEVICES = Integer.parseInt(prop.getProperty("max_number_of_mobile_devices"));
-			MOBILE_DEVICE_COUNTER_SIZE = Integer.parseInt(prop.getProperty("mobile_device_counter_size"));
-			
-			WAN_PROPOGATION_DELAY = Double.parseDouble(prop.getProperty("wan_propogation_delay"));
-			LAN_INTERNAL_DELAY = Double.parseDouble(prop.getProperty("lan_internal_delay"));
-			BANDWITH_WLAN = 1000 * Integer.parseInt(prop.getProperty("wlan_bandwidth"));
-			BANDWITH_WAN = 1000 * Integer.parseInt(prop.getProperty("wan_bandwidth"));
-			BANDWITH_GSM =  1000 * Integer.parseInt(prop.getProperty("gsm_bandwidth"));
-
-			//It is assumed that
-			//-Storage and RAM are unlimited in cloud
-			//-Each task is executed with maximum capacity (as if there is no task in the cloud) 
-			MIPS_FOR_CLOUD = Integer.parseInt(prop.getProperty("mips_for_cloud"));
-
-			ORCHESTRATOR_POLICIES = prop.getProperty("orchestrator_policies").split(",");
-			
-			SIMULATION_SCENARIOS = prop.getProperty("simulation_scenarios").split(",");
-			
-			//avg waiting time in a place (min)
-			double place1_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L1_mean_waiting_time"));
-			double place2_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L2_mean_waiting_time"));
-			double place3_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L3_mean_waiting_time"));
-			
-			//mean waiting time (minute)
-			mobilityLookUpTable = new double[]{
-				place1_mean_waiting_time, //ATTRACTIVENESS_L1
-				place2_mean_waiting_time, //ATTRACTIVENESS_L2
-				place3_mean_waiting_time  //ATTRACTIVENESS_L3
-		    };
-			
+			prop.store(fos, "The new config file");			
 			
 		}catch (IOException ex) {
 			ex.printStackTrace();
@@ -318,10 +277,15 @@ public class SimInputConfig {
 			setParametersForApp(doc, applications, num_of_app, sc);
 			SimInputConfig.writeXml(doc, applicationsFile);
 			
-		}catch(Exception e) {
-//			SimLogger.printLine("Applications XML cannot be parsed! Terminating simulation...");
-			e.printStackTrace();
-			System.exit(0);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			try {
+				SimLogger.printLine("Creating applications successfully!");
+			} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(0);
+			}
 		}
 	}
 	
@@ -355,10 +319,15 @@ public class SimInputConfig {
 			setParametersForEdge(doc, applications, numOfEdgeServer, numOfHost, numOfVirtualNode, sc);
 			SimInputConfig.writeXml(doc, edgeDevicesFile);
 			
-		}catch (Exception e) {
-//			SimLogger.printLine("Edge Devices XML cannot be parsed! Terminating simulation...");
-			e.printStackTrace();
-			System.exit(0);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			try {
+				SimLogger.printLine("Creating edge devices successfully!");
+			} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(0);
+			}
 		}
 	}
 	
@@ -580,7 +549,7 @@ public class SimInputConfig {
 	 * @return
 	 * @throws IOException
 	 */
-	private File createfile (String filename) throws IOException{
+	private File createFile (String filename) throws IOException{
 		File file = new File(filename);
 		if (!file.exists()) {
 			file.createNewFile();
