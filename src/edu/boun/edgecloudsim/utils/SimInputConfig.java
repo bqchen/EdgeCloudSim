@@ -246,7 +246,7 @@ public class SimInputConfig {
 				try {
 					input.close();
 					result = true;
-					SimLogger.printLine("Creating properties successfully!");
+					SimLogger.printLine("Creating properties successfully!!");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

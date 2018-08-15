@@ -52,9 +52,9 @@ public class UavApplication1 {
 		//load settings from configuration file
 //		SimSettings SS = SimSettings.getInstance();
 		SimInputConfig SS = SimInputConfig.getInstance();
-		SS.setConfigurationPropertiesFile(configFile);
-		SS.setApplicationXMLFile(applicationsFile);
-		SS.setEdgeDeviceXMLFile(edgeDevicesFile);
+//		SS.setConfigurationPropertiesFile(configFile);
+//		SS.setApplicationXMLFile(applicationsFile);
+//		SS.setEdgeDeviceXMLFile(edgeDevicesFile);
 		
 		if(SS.initialize(configFile, edgeDevicesFile, applicationsFile) == false) {
 			SimLogger.printLine("cannot initialize simulation settings");
