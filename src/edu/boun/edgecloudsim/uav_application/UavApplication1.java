@@ -39,7 +39,7 @@ public class UavApplication1 {
 			iterationNumber = Integer.parseInt(args[4]);
 		}
 		else{
-			SimLogger.printLine("Simulation setting file, output folder and iteration number are not provided! Using default ones...");
+//			SimLogger.printLine("Simulation setting file, output folder and iteration number are not provided! Using default ones...");
 			configFile = "scripts/uav_application/config/config1.properties";
 			applicationsFile = "scripts/uav_application/config/applications1.xml";
 			edgeDevicesFile = "scripts/uav_application/config/edge_devices1.xml";
@@ -51,6 +51,8 @@ public class UavApplication1 {
 		
 		//load settings from configuration file
 //		SimSettings SS = SimSettings.getInstance();
+		
+		// set configuration file
 		SimInputConfig SS = SimInputConfig.getInstance();
 //		SS.setConfigurationPropertiesFile(configFile);
 //		SS.setApplicationXMLFile(applicationsFile);

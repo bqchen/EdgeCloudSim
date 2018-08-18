@@ -205,9 +205,9 @@ public class SimInputConfig {
 			String wan_bandwidth = sc.next();
 			prop.setProperty("wan_bandwidth", wan_bandwidth);
 			
-			SimLogger.print("GSM Bandwidth (Mbps): ");
-			String gsm_bandwidth = sc.next();
-			prop.setProperty("gsm_bandwidth", gsm_bandwidth);
+//			SimLogger.print("GSM Bandwidth (Mbps): ");
+//			String gsm_bandwidth = sc.next();
+//			prop.setProperty("gsm_bandwidth", gsm_bandwidth);
 			
 			
 			SimLogger.print("MIPS for Cloud: ");
@@ -218,22 +218,22 @@ public class SimInputConfig {
 			String orchestrator_policies = sc.next();
 			prop.setProperty("orchestrator_policies", orchestrator_policies);
 			
-			SimLogger.print("Simulation Scenarios (use ',' for multiple values): ");
-			String simulation_scenarios = sc.next();
-			prop.setProperty("simulation_scenarios", simulation_scenarios);
+//			SimLogger.print("Simulation Scenarios (use ',' for multiple values): ");
+//			String simulation_scenarios = sc.next();
+			prop.setProperty("simulation_scenarios", "TWO_TIER");
 			
 			
-			SimLogger.print("Attractiveness L1 Mean Waiting Time (min): ");
+			SimLogger.print("Attractiveness Mean Waiting Time (min): ");
 			String attractiveness_L1_mean_waiting_time = sc.next();
 			prop.setProperty("attractiveness_L1_mean_waiting_time", attractiveness_L1_mean_waiting_time);
 			
-			SimLogger.print("Attractiveness L2 Mean Waiting Time (min): ");
-			String attractiveness_L2_mean_waiting_time = sc.next();
-			prop.setProperty("attractiveness_L2_mean_waiting_time", attractiveness_L2_mean_waiting_time);
-			
-			SimLogger.print("Attractiveness L3 Mean Waiting Time (min): ");
-			String attractiveness_L3_mean_waiting_time = sc.next();
-			prop.setProperty("attractiveness_L3_mean_waiting_time", attractiveness_L3_mean_waiting_time);
+//			SimLogger.print("Attractiveness L2 Mean Waiting Time (min): ");
+//			String attractiveness_L2_mean_waiting_time = sc.next();
+//			prop.setProperty("attractiveness_L2_mean_waiting_time", attractiveness_L2_mean_waiting_time);
+//			
+//			SimLogger.print("Attractiveness L3 Mean Waiting Time (min): ");
+//			String attractiveness_L3_mean_waiting_time = sc.next();
+//			prop.setProperty("attractiveness_L3_mean_waiting_time", attractiveness_L3_mean_waiting_time);
 			
 //			prop.save(fos, "The new config file");
 			fos = new FileOutputStream(propertiesFile);
@@ -499,7 +499,7 @@ public class SimInputConfig {
 			LAN_INTERNAL_DELAY = Double.parseDouble(prop.getProperty("lan_internal_delay"));
 			BANDWITH_WLAN = 1000 * Integer.parseInt(prop.getProperty("wlan_bandwidth"));
 			BANDWITH_WAN = 1000 * Integer.parseInt(prop.getProperty("wan_bandwidth"));
-			BANDWITH_GSM =  1000 * Integer.parseInt(prop.getProperty("gsm_bandwidth"));
+//			BANDWITH_GSM =  1000 * Integer.parseInt(prop.getProperty("gsm_bandwidth"));
 
 			//It is assumed that
 			//-Storage and RAM are unlimited in cloud
@@ -512,14 +512,14 @@ public class SimInputConfig {
 			
 			//avg waiting time in a place (min)
 			double place1_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L1_mean_waiting_time"));
-			double place2_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L2_mean_waiting_time"));
-			double place3_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L3_mean_waiting_time"));
+//			double place2_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L2_mean_waiting_time"));
+//			double place3_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L3_mean_waiting_time"));
 			
 			//mean waiting time (minute)
 			mobilityLookUpTable = new double[]{
 				place1_mean_waiting_time, //ATTRACTIVENESS_L1
-				place2_mean_waiting_time, //ATTRACTIVENESS_L2
-				place3_mean_waiting_time  //ATTRACTIVENESS_L3
+//				place2_mean_waiting_time, //ATTRACTIVENESS_L2
+//				place3_mean_waiting_time  //ATTRACTIVENESS_L3
 		    };
 			
 

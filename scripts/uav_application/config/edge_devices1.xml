@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><edge_devices>
-<datacenter arch="x86" os="Linux" vmm="Xen">
+<datacenter arch="x86" os="ARINC653" vmm="Xen">
 <costPerBw>0.1</costPerBw>
 <costPerSec>3.0</costPerSec>
 <costPerMem>0.05</costPerMem>
