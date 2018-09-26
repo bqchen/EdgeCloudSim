@@ -79,7 +79,7 @@ public class BasicEdgeOrchestrator extends EdgeOrchestrator {
 		
 		if(policy.equalsIgnoreCase("RANDOM_FIT")){
 			int randomIndex = SimUtils.getRandomNumber(0, vmArray.size()-1);
-			double requiredCapacity = ((CpuUtilizationModel_Custom)task.getUtilizationModelCpu()).predictUtilization(vmArray.get(randomIndex).getVmType());
+			double requiredCapacity	= ((CpuUtilizationModel_Custom)task.getUtilizationModelCpu()).predictUtilization(vmArray.get(randomIndex).getVmType());
 			double targetVmCapacity = (double)100 - vmArray.get(randomIndex).getCloudletScheduler().getTotalUtilizationOfCpu(CloudSim.clock());
 			if(requiredCapacity <= targetVmCapacity)
 				selectedVM = vmArray.get(randomIndex);
